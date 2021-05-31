@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Table - DataGovernance</title>
+    <link rel="stylesheet" href="static/table/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,1600,1600i,900,900i">
+    <link rel="stylesheet" href="static/table/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="static/table/fonts/modalBox.css">
+    <style type="text/css">
+     table {
+         border-collapse: collapse;
+         table-layout: fixed;
+     }
+     td {
+         border: 1px solid #ddd;
+         word-break: break-word;
+     }
+    </style>
+    <style type="text/css">
+    table.imagetable {
+        font-family: verdana,arial,sans-serif;
+        font-size:11px;
+        color:#333333;
+        border-width: 1px;
+        border-color: #999999;
+        border-collapse: collapse;
+    }
+    table.imagetable th {
+        background:#b5cfd2 url('cell-blue.jpg');
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
+    }
+    table.imagetable td {
+        background:#dcddc0 url('cell-grey.jpg');
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
+    }
+    </style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper"><nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+    <div class="container-fluid d-flex flex-column p-0">
+        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+            <div class="sidebar-brand-icon rotate-n-15"></div>
+            <div class="sidebar-brand-text mx-3"><font color='blue'><span>DataGovernance</span></font></div>
+        </a>
+        <hr class="sidebar-divider my-0" />
+        <ul
+            class="nav navbar-nav text-light" id="accordionSidebar">
+            <li class="nav-item"><a class="nav-link active"><i class="fas fa-table"></i><button class="btn btn-primary" type="button"  onClick="abstractDataMapCheck()">DataMap</button></a></li>
+        </ul>
+        <table>
+            <tr>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="hiveDataMapCacheCheck()">hive</button>
+                </td>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="hiveDataMapCheck()">刷新</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="mysqlDataMapCacheCheck()">mysql</button>
+                </td>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="mysqlDataMapCheck()">刷新</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="redisDataMapCacheCheck()">redis</button>
+                </td>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="redisDataMapCheck()">刷新</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="esDataMapCacheCheck()">ES</button>
+                </td>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="esDataMapCheck()">刷新</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="neoDataMapCacheCheck()">neo4j</button>
+                </td>
+                <td>
+                <button class="btn btn-primary" type="button" onClick="neoDataMapCheck()">刷新</button>
+                </td>
+            </tr>
+        </table>
+        <ul
+            class="nav navbar-nav text-light" id="accordionSidebar">
+            <li class="nav-item"><a class="nav-link active"><i class="fas fa-table"></i><button class="btn btn-primary" type="button"  onClick="hiveDataMapCheck()">DataBlood</button></a></li>
+        </ul>
+            <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+    </div>
+</nav>
+        <div class="d-flex flex-column" id="content-wrapper"><div id="content">
+    <div class="container-fluid">
+        <div class="card shadow"></div>
+    </div>
+    <div class="table-responsive" id="table-show">
+
+    </div>
+</div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © DataGovernance 2021</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>头部</h2>
+                    <span id="closeBtn" class="close">×</span>
+                </div>
+                <div class="modal-body">
+                    <p>这是一个模态框！</p>
+                    <p>喜欢就点个赞吧！</p>
+                </div>
+                <div class="modal-footer">
+                    <h3>尾部</h3>
+                </div>
+            </div>
+        </div>
+    <script src="static/table/js/jquery.min.js"></script>
+    <script src="static/table/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="static/table/js/theme.js"></script>
+
+    <script type="text/javascript">
+        function abstractDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/AbstractDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<font color='blue'><span>Hive Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var hiveAbstractData = result.hive_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(hiveAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Mysql Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var mysqlAbstractData = result.mysql_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(mysqlAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=mysqlDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Redis Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var redisAbstractData = result.redis_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(redisAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>ES Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var esAbstractData = result.es_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(esAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=esDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Neo4j Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var neoAbstractData = result.neo_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(neoAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        $(function abstractDataMapCheck() {
+            
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/AbstractDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<font color='blue'><span>Hive Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var hiveAbstractData = result.hive_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(hiveAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Mysql Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var mysqlAbstractData = result.mysql_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(mysqlAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=mysqlDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Redis Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var redisAbstractData = result.redis_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(redisAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>ES Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var esAbstractData = result.es_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(esAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=esDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    tabStr += "<font color='blue'><span>Neo4j Data Map</span></font><p></p>";
+                    tabStr += "<table border='5' width='1700' class='imagetable'>";
+                    var neoAbstractData = result.neo_abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    $.each(neoAbstractData, function (i, abstractInfo) {
+                        tabStr += "<tr><td width='160'>" + abstractInfo.dbName
+                                + "</td><td width='160'>" + abstractInfo.tableName
+                                + "</td><td width='160'>" + abstractInfo.numRows
+                                + "</td><td width='160'>" + abstractInfo.totalSize
+                                + "</td><td width='160'>" + abstractInfo.numAddedYesterday
+                                + "</td><td width='160'>" + abstractInfo.numAddedlastWeek
+                                + "</td><td width='160'>" + abstractInfo.lastUpdateTime
+                                + "</td><td width='160'>" + abstractInfo.createTime
+                                + "</td><td width='160'>" + abstractInfo.tableComment
+                                + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                + "</td></tr>";
+                    });
+                    tabStr += "</table><p></p>";
+                    
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        });
+    </script>
+    <script type="text/javascript">
+        function hiveDataMapCacheCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/HiveDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var hiveSource = result.hive_source;
+                    
+                    $.each(hiveSource, function (i, tableInfo) {
+                        var colList = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(colList, function (i, colInfo) {
+                            tabStr += "<tr><td  width='566'>" + colInfo.col_name
+                                    + "</td><td  width='566'>" + colInfo.col_type
+                                    + "</td><td  width='566'>" + colInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        // tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>data_type</span></font></th><th style='background-color:gray'><font color='blue'><span>comment</span></font></th></tr>";
+                        var detailedTableInformation = tableInfo.DetailedTableInformation;
+                        
+                        var databaseList = detailedTableInformation.Database;
+                        $.each(databaseList, function (i, databaseInfo) {
+                            tabStr += "<tr><td  width='566'>Database</td><td  width='566'>" + databaseInfo.data_type
+                                    + "</td><td  width='566'>" + databaseInfo.comment + "</td></tr>";
+                        });
+                        
+                        var ownerTypeList = detailedTableInformation.OwnerType;
+                        $.each(ownerTypeList, function (i, ownerTypeInfo) {
+                            tabStr += "<tr><td  width='566'>OwnerType</td><td  width='566'>" + ownerTypeInfo.data_type
+                                    + "</td><td  width='566'>" + ownerTypeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var ownerList = detailedTableInformation.Owner;
+                        $.each(ownerList, function (i, ownerInfo) {
+                            tabStr += "<tr><td  width='566'>Owner</td><td  width='566'>" + ownerInfo.data_type
+                                    + "</td><td  width='566'>" + ownerInfo.comment + "</td></tr>";
+                        });
+                        
+                        var createTimeList = detailedTableInformation.CreateTime;
+                        $.each(createTimeList, function (i, createTimeInfo) {
+                            tabStr += "<tr><td  width='566'>CreateTime</td><td  width='566'>" + createTimeInfo.data_type
+                                    + "</td><td  width='566'>" + createTimeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var lastAccessTimeList = detailedTableInformation.LastAccessTime;
+                        $.each(lastAccessTimeList, function (i, lastAccessTimeInfo) {
+                            tabStr += "<tr><td  width='566'>LastAccessTime</td><td  width='566'>" + lastAccessTimeInfo.data_type
+                                    + "</td><td  width='566'>" + lastAccessTimeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var retentionList = detailedTableInformation.Retention;
+                        $.each(retentionList, function (i, retentionInfo) {
+                            tabStr += "<tr><td  width='566'>Retention</td><td  width='566'>" + retentionInfo.data_type
+                                    + "</td><td  width='566'>" + retentionInfo.comment + "</td></tr>";
+                        });
+                        
+                        var locationList = detailedTableInformation.Location;
+                        $.each(locationList, function (i, locationInfo) {
+                            tabStr += "<tr><td  width='566'>Location</td><td  width='566'>" + locationInfo.data_type
+                                    + "</td><td  width='566'>" + locationInfo.comment + "</td></tr>";
+                        });
+                        
+                        var tableTypeList = detailedTableInformation.TableType;
+                        $.each(tableTypeList, function (i, tableTypeInfo) {
+                            tabStr += "<tr><td  width='566'>TableType</td><td  width='566'>" + tableTypeInfo.data_type
+                                    + "</td><td  width='566'>" + tableTypeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var tableParametersList = detailedTableInformation.TableParameters;
+                        $.each(tableParametersList, function (i, tableParametersInfo) {
+                            tabStr += "<tr><td  width='566'>TableParameters</td><td  width='566'>" + tableParametersInfo.data_type
+                                    + "</td><td  width='566'>" + tableParametersInfo.comment + "</td></tr>";
+                        });
+                        //tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>data_type</span></font></th><th style='background-color:gray'><font color='blue'><span>comment</span></font></th></tr>";
+                        var storageInformation = tableInfo.StorageInformation;
+                        
+                        var serDeLibraryList = storageInformation.SerDeLibrary;
+                        $.each(serDeLibraryList, function (i, serDeLibraryInfo) {
+                            tabStr += "<tr><td  width='566'>SerDeLibrary</td><td  width='566'>" + serDeLibraryInfo.data_type
+                                    + "</td><td  width='566'>" + serDeLibraryInfo.comment + "</td></tr>";
+                        });
+                        
+                        var inputFormatList = storageInformation.InputFormat;
+                        $.each(inputFormatList, function (i, inputFormatInfo) {
+                            tabStr += "<tr><td  width='566'>InputFormat</td><td  width='566'>" + inputFormatInfo.data_type
+                                    + "</td><td  width='566'>" + inputFormatInfo.comment + "</td></tr>";
+                        });
+                        
+                        var outputFormatList = storageInformation.OutputFormat;
+                        $.each(outputFormatList, function (i, outputFormatInfo) {
+                            tabStr += "<tr><td  width='566'>OutputFormat</td><td  width='566'>" + outputFormatInfo.data_type
+                                    + "</td><td  width='566'>" + outputFormatInfo.comment + "</td></tr>";
+                        });
+                        
+                        var compressedList = storageInformation.Compressed;
+                        $.each(compressedList, function (i, compressedInfo) {
+                            tabStr += "<tr><td  width='566'>Compressed</td><td  width='566'>" + compressedInfo.data_type
+                                    + "</td><td  width='566'>" + compressedInfo.comment + "</td></tr>";
+                        });
+                        
+                        var numBucketsList = storageInformation.NumBuckets;
+                        $.each(numBucketsList, function (i, numBucketsInfo) {
+                            tabStr += "<tr><td  width='566'>NumBuckets</td><td  width='566'>" + numBucketsInfo.data_type
+                                    + "</td><td  width='566'>" + numBucketsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var bucketColumnsList = storageInformation.BucketColumns;
+                        $.each(bucketColumnsList, function (i, bucketColumnsInfo) {
+                            tabStr += "<tr><td  width='566'>BucketColumns</td><td  width='566'>" + bucketColumnsInfo.data_type
+                                    + "</td><td  width='566'>" + bucketColumnsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var sortColumnsList = storageInformation.SortColumns;
+                        $.each(sortColumnsList, function (i, sortColumnsInfo) {
+                            tabStr += "<tr><td  width='566'>SortColumns</td><td  width='566'>" + sortColumnsInfo.data_type
+                                    + "</td><td  width='566'>" + sortColumnsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var storageDescParamsList = storageInformation.StorageDescParams;
+                        $.each(storageDescParamsList, function (i, storageDescParamsInfo) {
+                            tabStr += "<tr><td  width='566'>StorageDescParams</td><td  width='566'>" + storageDescParamsInfo.data_type
+                                    + "</td><td  width='566'>" + storageDescParamsInfo.comment + "</td></tr>";
+                        });
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    // tabStr += "<script type='text/javascript' src='static/table/js/modalBox.js'><\/script>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function hiveDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/HiveDataMap',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var hiveSource = result.hive_source;
+                    
+                    $.each(hiveSource, function (i, tableInfo) {
+                        var colList = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(colList, function (i, colInfo) {
+                            tabStr += "<tr><td  width='566'>" + colInfo.col_name
+                                    + "</td><td  width='566'>" + colInfo.col_type
+                                    + "</td><td  width='566'>" + colInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        // tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>data_type</span></font></th><th style='background-color:gray'><font color='blue'><span>comment</span></font></th></tr>";
+                        var detailedTableInformation = tableInfo.DetailedTableInformation;
+                        
+                        var databaseList = detailedTableInformation.Database;
+                        $.each(databaseList, function (i, databaseInfo) {
+                            tabStr += "<tr><td  width='566'>Database</td><td  width='566'>" + databaseInfo.data_type
+                                    + "</td><td  width='566'>" + databaseInfo.comment + "</td></tr>";
+                        });
+                        
+                        var ownerTypeList = detailedTableInformation.OwnerType;
+                        $.each(ownerTypeList, function (i, ownerTypeInfo) {
+                            tabStr += "<tr><td  width='566'>OwnerType</td><td  width='566'>" + ownerTypeInfo.data_type
+                                    + "</td><td  width='566'>" + ownerTypeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var ownerList = detailedTableInformation.Owner;
+                        $.each(ownerList, function (i, ownerInfo) {
+                            tabStr += "<tr><td  width='566'>Owner</td><td  width='566'>" + ownerInfo.data_type
+                                    + "</td><td  width='566'>" + ownerInfo.comment + "</td></tr>";
+                        });
+                        
+                        var createTimeList = detailedTableInformation.CreateTime;
+                        $.each(createTimeList, function (i, createTimeInfo) {
+                            tabStr += "<tr><td  width='566'>CreateTime</td><td  width='566'>" + createTimeInfo.data_type
+                                    + "</td><td  width='566'>" + createTimeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var lastAccessTimeList = detailedTableInformation.LastAccessTime;
+                        $.each(lastAccessTimeList, function (i, lastAccessTimeInfo) {
+                            tabStr += "<tr><td  width='566'>LastAccessTime</td><td  width='566'>" + lastAccessTimeInfo.data_type
+                                    + "</td><td  width='566'>" + lastAccessTimeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var retentionList = detailedTableInformation.Retention;
+                        $.each(retentionList, function (i, retentionInfo) {
+                            tabStr += "<tr><td  width='566'>Retention</td><td  width='566'>" + retentionInfo.data_type
+                                    + "</td><td  width='566'>" + retentionInfo.comment + "</td></tr>";
+                        });
+                        
+                        var locationList = detailedTableInformation.Location;
+                        $.each(locationList, function (i, locationInfo) {
+                            tabStr += "<tr><td  width='566'>Location</td><td  width='566'>" + locationInfo.data_type
+                                    + "</td><td  width='566'>" + locationInfo.comment + "</td></tr>";
+                        });
+                        
+                        var tableTypeList = detailedTableInformation.TableType;
+                        $.each(tableTypeList, function (i, tableTypeInfo) {
+                            tabStr += "<tr><td  width='566'>TableType</td><td  width='566'>" + tableTypeInfo.data_type
+                                    + "</td><td  width='566'>" + tableTypeInfo.comment + "</td></tr>";
+                        });
+                        
+                        var tableParametersList = detailedTableInformation.TableParameters;
+                        $.each(tableParametersList, function (i, tableParametersInfo) {
+                            tabStr += "<tr><td  width='566'>TableParameters</td><td  width='566'>" + tableParametersInfo.data_type
+                                    + "</td><td  width='566'>" + tableParametersInfo.comment + "</td></tr>";
+                        });
+                        //tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>data_type</span></font></th><th style='background-color:gray'><font color='blue'><span>comment</span></font></th></tr>";
+                        var storageInformation = tableInfo.StorageInformation;
+                        
+                        var serDeLibraryList = storageInformation.SerDeLibrary;
+                        $.each(serDeLibraryList, function (i, serDeLibraryInfo) {
+                            tabStr += "<tr><td  width='566'>SerDeLibrary</td><td  width='566'>" + serDeLibraryInfo.data_type
+                                    + "</td><td  width='566'>" + serDeLibraryInfo.comment + "</td></tr>";
+                        });
+                        
+                        var inputFormatList = storageInformation.InputFormat;
+                        $.each(inputFormatList, function (i, inputFormatInfo) {
+                            tabStr += "<tr><td  width='566'>InputFormat</td><td  width='566'>" + inputFormatInfo.data_type
+                                    + "</td><td  width='566'>" + inputFormatInfo.comment + "</td></tr>";
+                        });
+                        
+                        var outputFormatList = storageInformation.OutputFormat;
+                        $.each(outputFormatList, function (i, outputFormatInfo) {
+                            tabStr += "<tr><td  width='566'>OutputFormat</td><td  width='566'>" + outputFormatInfo.data_type
+                                    + "</td><td  width='566'>" + outputFormatInfo.comment + "</td></tr>";
+                        });
+                        
+                        var compressedList = storageInformation.Compressed;
+                        $.each(compressedList, function (i, compressedInfo) {
+                            tabStr += "<tr><td  width='566'>Compressed</td><td  width='566'>" + compressedInfo.data_type
+                                    + "</td><td  width='566'>" + compressedInfo.comment + "</td></tr>";
+                        });
+                        
+                        var numBucketsList = storageInformation.NumBuckets;
+                        $.each(numBucketsList, function (i, numBucketsInfo) {
+                            tabStr += "<tr><td  width='566'>NumBuckets</td><td  width='566'>" + numBucketsInfo.data_type
+                                    + "</td><td  width='566'>" + numBucketsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var bucketColumnsList = storageInformation.BucketColumns;
+                        $.each(bucketColumnsList, function (i, bucketColumnsInfo) {
+                            tabStr += "<tr><td  width='566'>BucketColumns</td><td  width='566'>" + bucketColumnsInfo.data_type
+                                    + "</td><td  width='566'>" + bucketColumnsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var sortColumnsList = storageInformation.SortColumns;
+                        $.each(sortColumnsList, function (i, sortColumnsInfo) {
+                            tabStr += "<tr><td  width='566'>SortColumns</td><td  width='566'>" + sortColumnsInfo.data_type
+                                    + "</td><td  width='566'>" + sortColumnsInfo.comment + "</td></tr>";
+                        });
+                        
+                        var storageDescParamsList = storageInformation.StorageDescParams;
+                        $.each(storageDescParamsList, function (i, storageDescParamsInfo) {
+                            tabStr += "<tr><td  width='566'>StorageDescParams</td><td  width='566'>" + storageDescParamsInfo.data_type
+                                    + "</td><td  width='566'>" + storageDescParamsInfo.comment + "</td></tr>";
+                        });
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function mysqlDataMapCacheCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/MysqlDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=mysqlDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var mysqlSource = result.mysql_source;
+                    
+                    $.each(mysqlSource, function (i, tableInfo) {
+                        var colList = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(colList, function (i, colInfo) {
+                            tabStr += "<tr><td  width='566'>" + colInfo.col_name
+                                    + "</td><td  width='566'>" + colInfo.col_type
+                                    + "</td><td  width='566'>" + colInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        // tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><th style='background-color:gray'><font color='blue'><span>index_name</span></font></th><th style='background-color:gray'><font color='blue'><span>index_field</span></font></th></tr>";
+                        var indexInformation = tableInfo.index_information;
+                        
+                        $.each(indexInformation, function (i, indexInfo) {
+                            tabStr += "<tr><td  width='566'>" + indexInfo.table_name
+                                    + "</td><td  width='566'>" + indexInfo.index_name
+                                    + "</td><td  width='566'>" + indexInfo.index_field
+                                    + "</td></tr>";
+                        });
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>infoType</span></font></th><th style='background-color:gray'><font color='blue'><span>infoField</span></font></th><th style='background-color:gray'><font color='blue'><span>infoValue</span></font></th></tr>";
+                        var detailInformation = tableInfo.detail_information;
+                        
+                        $.each(detailInformation, function (i, detailInfo) {
+                            tabStr += "<tr><td  width='566'>" + detailInfo.infoType
+                                + "</td><td  width='566'>" + detailInfo.infoField
+                                + "</td><td  width='566'>" + detailInfo.infoValue
+                                + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function mysqlDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/MysqlDataMap',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=mysqlDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var mysqlSource = result.mysql_source;
+                    
+                    $.each(mysqlSource, function (i, tableInfo) {
+                        var colList = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(colList, function (i, colInfo) {
+                            tabStr += "<tr><td  width='566'>" + colInfo.col_name
+                                    + "</td><td  width='566'>" + colInfo.col_type
+                                    + "</td><td  width='566'>" + colInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        // tabStr += "</table><p></p><table border='3'>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><th style='background-color:gray'><font color='blue'><span>index_name</span></font></th><th style='background-color:gray'><font color='blue'><span>index_field</span></font></th></tr>";
+                        var indexInformation = tableInfo.index_information;
+                        
+                        $.each(indexInformation, function (i, indexInfo) {
+                            tabStr += "<tr><td  width='566'>" + indexInfo.table_name
+                                    + "</td><td  width='566'>" + indexInfo.index_name
+                                    + "</td><td  width='566'>" + indexInfo.index_field
+                                    + "</td></tr>";
+                        });
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>infoType</span></font></th><th style='background-color:gray'><font color='blue'><span>infoField</span></font></th><th style='background-color:gray'><font color='blue'><span>infoValue</span></font></th></tr>";
+                        var detailInformation = tableInfo.detail_information;
+                        
+                        $.each(detailInformation, function (i, detailInfo) {
+                            tabStr += "<tr><td  width='566'>" + detailInfo.infoType
+                                + "</td><td  width='566'>" + detailInfo.infoField
+                                + "</td><td  width='566'>" + detailInfo.infoValue
+                                + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function redisDataMapCacheCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/RedisDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var redisSource = result.redis_source;
+                    
+                    $.each(redisSource, function (i, tableInfo) {
+                        var resourceCheck = tableInfo.resource_check;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>clusterNode</span></font></th><th style='background-color:gray'><font color='blue'><span>resourceField</span></font></th><th style='background-color:gray'><font color='blue'><span>resourceValue</span></font></th></tr>";
+                        $.each(resourceCheck, function (i, resourceInfo) {
+                            tabStr += "<tr><td  width='566'>" + resourceInfo.clusterNode
+                                    + "</td><td  width='566'>" + resourceInfo.resourceField
+                                    + "</td><td  width='566'>" + resourceInfo.resourceValue
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function redisDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/RedisDataMap',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var redisSource = result.redis_source;
+                    
+                    $.each(redisSource, function (i, tableInfo) {
+                        var resourceCheck = tableInfo.resource_check;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>clusterNode</span></font></th><th style='background-color:gray'><font color='blue'><span>resourceField</span></font></th><th style='background-color:gray'><font color='blue'><span>resourceValue</span></font></th></tr>";
+                        $.each(resourceCheck, function (i, resourceInfo) {
+                            tabStr += "<tr><td  width='566'>" + resourceInfo.clusterNode
+                                    + "</td><td  width='566'>" + resourceInfo.resourceField
+                                    + "</td><td  width='566'>" + resourceInfo.resourceValue
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function esDataMapCacheCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/ESDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=esDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var esSource = result.es_source;
+                    
+                    $.each(esSource, function (i, tableInfo) {
+                        var resourceCheck = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(resourceCheck, function (i, resourceInfo) {
+                            tabStr += "<tr><td  width='566'>" + resourceInfo.col_name
+                                    + "</td><td  width='566'>" + resourceInfo.col_type
+                                    + "</td><td  width='566'>" + resourceInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        var detailInformation = tableInfo.detail_information;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>index_name</span></font></th><th style='background-color:gray'><font color='blue'><span>info_field</span></font></th><th style='background-color:gray'><font color='blue'><span>info_value</span></font></th></tr>";
+                        $.each(detailInformation, function (i, detailInfo) {
+                            tabStr += "<tr><td  width='566'>" + detailInfo.index_name
+                                    + "</td><td  width='566'>" + detailInfo.info_field
+                                    + "</td><td  width='566'>" + detailInfo.info_value
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function esDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/ESDataMap',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=esDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var esSource = result.es_source;
+                    
+                    $.each(esSource, function (i, tableInfo) {
+                        var resourceCheck = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>table_name</span></font></th><td  width='531'>" + tableInfo.table_name + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>col_name</span></font></th><th style='background-color:gray'><font color='blue'><span>col_type</span></font></th><th style='background-color:gray'><font color='blue'><span>col_comment</span></font></th></tr>";
+                        $.each(resourceCheck, function (i, resourceInfo) {
+                            tabStr += "<tr><td  width='566'>" + resourceInfo.col_name
+                                    + "</td><td  width='566'>" + resourceInfo.col_type
+                                    + "</td><td  width='566'>" + resourceInfo.col_comment
+                                    + "</td></tr>";
+                        });
+                        var detailInformation = tableInfo.detail_information;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>index_name</span></font></th><th style='background-color:gray'><font color='blue'><span>info_field</span></font></th><th style='background-color:gray'><font color='blue'><span>info_value</span></font></th></tr>";
+                        $.each(detailInformation, function (i, detailInfo) {
+                            tabStr += "<tr><td  width='566'>" + detailInfo.index_name
+                                    + "</td><td  width='566'>" + detailInfo.info_field
+                                    + "</td><td  width='566'>" + detailInfo.info_value
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function neoDataMapCacheCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/NeoDataMapCache',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var neoSource = result.neo_source;
+                    
+                    $.each(neoSource, function (i, tableInfo) {
+                        var attrCheck = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>connect_url</span></font></th><td  width='531'>" + tableInfo.connect_url + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>attr_type</span></font></th><th style='background-color:gray'><font color='blue'><span>attr_name</span></font></th><th style='background-color:gray'><font color='blue'><span>attr_comment</span></font></th></tr>";
+                        $.each(attrCheck, function (i, attrInfo) {
+                            tabStr += "<tr><td  width='566'>" + attrInfo.attr_type
+                                    + "</td><td  width='566'>" + attrInfo.attr_name
+                                    + "</td><td  width='566'>" + attrInfo.attr_comment
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function neoDataMapCheck() {
+            $.ajax({
+                type: 'get',
+                url: 'http://172.28.128.16:8000/NeoDataMap',
+                async: true,
+                jsonp: 'jsoncallback',
+                success: function (data) {
+
+                    var result = $.parseJSON(data);
+                    var tabStr = "<table border='5' width='1700' class='imagetable'>";
+                    
+                    var abstractData = result.abstract_data;
+                    tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>dbName</span></font></th><th style='background-color:gray'><font color='blue'><span>tableName</span></font></th><th style='background-color:gray'><font color='blue'><span>numRows</span></font></th><th style='background-color:gray'><font color='blue'><span>totalSize</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedYesterday</span></font></th><th style='background-color:gray'><font color='blue'><span>numAddedlastWeek</span></font></th><th style='background-color:gray'><font color='blue'><span>lastUpdateTime</span></font></th><th style='background-color:gray'><font color='blue'><span>createTime</span></font></th><th style='background-color:gray'><font color='blue'><span>tableComment</span></font></th><th style='background-color:gray'><font color='blue'><span>Action</span></font></th></tr>";
+                    
+                    $.each(abstractData, function (i, abstractInfo) {
+                            tabStr += "<tr><td  width='160'>" + abstractInfo.dbName
+                                    + "</td><td  width='160'>" + abstractInfo.tableName
+                                    + "</td><td  width='160'>" + abstractInfo.numRows
+                                    + "</td><td  width='160'>" + abstractInfo.totalSize
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedYesterday
+                                    + "</td><td  width='160'>" + abstractInfo.numAddedlastWeek
+                                    + "</td><td  width='160'>" + abstractInfo.lastUpdateTime
+                                    + "</td><td  width='160'>" + abstractInfo.createTime
+                                    + "</td><td  width='160'>" + abstractInfo.tableComment
+                                    + "</td><td width='160'><input type='button' id='addBtn' value='添加'><input type='button' id='deleteBtn' value='删除'><input type='button' id='updateBtn' value='修改'><input type='button' id='selectBtn' value='查询' onClick=hiveDataQuery('"+abstractInfo.dbName+"','"+abstractInfo.tableName+"')>"
+                                    + "</td></tr>";
+                        });
+                    tabStr += "</table><p></p><table border='3' class='imagetable'>";
+                    var neoSource = result.neo_source;
+                    
+                    $.each(neoSource, function (i, tableInfo) {
+                        var attrCheck = tableInfo.col_name;
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>connect_url</span></font></th><td  width='531'>" + tableInfo.connect_url + "</td><td></td></tr>";
+                        tabStr += "<tr><th style='background-color:gray'><font color='blue'><span>attr_type</span></font></th><th style='background-color:gray'><font color='blue'><span>attr_name</span></font></th><th style='background-color:gray'><font color='blue'><span>attr_comment</span></font></th></tr>";
+                        $.each(attrCheck, function (i, attrInfo) {
+                            tabStr += "<tr><td  width='566'>" + attrInfo.attr_type
+                                    + "</td><td  width='566'>" + attrInfo.attr_name
+                                    + "</td><td  width='566'>" + attrInfo.attr_comment
+                                    + "</td></tr>";
+                        });
+                        
+                        tabStr += "</table><p></p><table border='3'  width='1700' class='imagetable'>";
+                        
+                    });
+                    tabStr += "</table><p>                 </p>";
+                    $('#table-show').html(tabStr);
+     
+                },
+                error: function () {
+                    $('#table-show').html("有问题");
+                }
+            });
+     
+        };
+    </script>
+    <script type="text/javascript">
+        function hiveDataQuery(dbName,tableName){
+            $.ajax({
+                url: "http://172.28.128.16:8000/HiveDataQuery",
+                type: "POST",
+                data:{
+                    DbName: dbName,
+                    TableName: tableName,
+                    QueryRowsCount: '10',
+                },
+                dataType: "json",
+                success: function (data) {
+                    var result = data;
+                    var queryResult = result.select_result
+                    var str = '<table border="1">';
+                    // 外层循环,生成tr
+                    for(var i = 0 ; i <= queryResult.length-1 ; i++){
+                        // 定义tr标签
+                        str += '<tr>';
+                        // 第一个单元格,内容是一维索引+1
+                        str += `<td>${i+1}</td>`;
+                        // 内层循环,生成其他td标签,内容是二维数组内容
+                        for(var j = 0 ; j <= queryResult[i].length-1 ; j++){
+                            str += `<td>${queryResult[i][j]}</td>`; 
+                        }
+                        str += '</tr>';
+                    }
+                    str += '</table>';
+                    win = window.open();
+                    win.document.write(str);
+                    
+                },
+                error: function (e) {
+
+                    alert(e);
+                }
+            });
+        
+        };
+    </script>
+    <script type="text/javascript">
+        function mysqlDataQuery(dbName,tableName){
+            $.ajax({
+                url: "http://172.28.128.16:8000/MysqlDataQuery",
+                type: "POST",
+                data:{
+                    DbName: dbName,
+                    TableName: tableName,
+                    QueryRowsCount: '10',
+                },
+                dataType: "json",
+                success: function (data) {
+                    var result = data;
+                    var queryResult = result.select_result
+                    var str = '<table border="1">';
+                    // 外层循环,生成tr
+                    for(var i = 0 ; i <= queryResult.length-1 ; i++){
+                        // 定义tr标签
+                        str += '<tr>';
+                        // 第一个单元格,内容是一维索引+1
+                        str += `<td>${i+1}</td>`;
+                        // 内层循环,生成其他td标签,内容是二维数组内容
+                        for(var j = 0 ; j <= queryResult[i].length-1 ; j++){
+                            str += `<td>${queryResult[i][j]}</td>`; 
+                        }
+                        str += '</tr>';
+                    }
+                    str += '</table>';
+                    win = window.open();
+                    win.document.write(str);
+                    
+                },
+                error: function (e) {
+
+                    alert(e);
+                }
+            });
+        
+        };
+    </script>
+    <script type="text/javascript">
+        function esDataQuery(dbName,tableName){
+            $.ajax({
+                url: "http://172.28.128.16:8000/EsDataQuery",
+                type: "POST",
+                data:{
+                    DbName: dbName,
+                    TableName: tableName,
+                    QueryRowsCount: '10',
+                },
+                dataType: "json",
+                success: function (data) {
+                    var result = data;
+                    var queryResult = result.select_result
+                    var str = '<table border="1">';
+                    // 外层循环,生成tr
+                    for(var i = 0 ; i <= queryResult.length-1 ; i++){
+                        // 定义tr标签
+                        str += '<tr>';
+                        // 第一个单元格,内容是一维索引+1
+                        str += `<td>${i+1}</td>`;
+                        // 内层循环,生成其他td标签,内容是二维数组内容
+                        for(var j = 0 ; j <= queryResult[i].length-1 ; j++){
+                            str += `<td>${queryResult[i][j]}</td>`; 
+                        }
+                        str += '</tr>';
+                    }
+                    str += '</table>';
+                    win = window.open();
+                    win.document.write(str);
+                    
+                },
+                error: function (e) {
+
+                    alert(e);
+                }
+            });
+        
+        };
+    </script>
+    
+</body>
+</html>
